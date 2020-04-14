@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+    <table>
+        {% for i in lst %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ i }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% if combine is sameas true %}
+        {{ lst|join(",") }}
+    {% endif %}
+{% endblock %}
