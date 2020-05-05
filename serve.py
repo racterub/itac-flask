@@ -12,6 +12,10 @@ app.secret_key = "test"
 DEBUG = True
 PORT = 8989
 
+"""
+THIS IS JINJA EXAMPLES
+THIS IS OLD VERSION
+"""
 # @app.route("/")
 # def index():
 #     return render_template("index.html", title="Index of /")
@@ -39,45 +43,54 @@ def db(dbname, dbid):
     return "dbname: %s, dbid: %s" % (dbname, dbid+123)
 
 # http get param
-@app.route("/user/")
-def user():
+@app.route("/get/")
+def get():
     name = request.args.get("name")
     passwd = request.args.get("passwd")
     return "name: %s, password: %s" % (name, passwd)
+
+@app.route("/post/")
+def post():
+    name = request.form["name"]
+    passwd = request.form["passwd"]
+    return "name: %s, password: %s" % (name, passwd)
+
+
 
 # implement login
 @app.route("/login/", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        if (username and password):
-            if (username == "test" and password == "test"):
-                session["user"] = username
+        try:
+            if (request.form["username"] == "test" and request.form["password"] == "test"):
+                session["user"] = request.form["username"]
                 return "Success"
             else:
                 return redirect(url_for("login", next=request.endpoint))
-        return "%s %s" % (username, password)
-
+        except ValueError:
+            return "Something broke", 400
     else:
         return render_template("login.html")
 
 # session
 @app.route("/admin/")
 def admin():
-    if (not session["user"]):
+    if ('user' not in session):
         return redirect(url_for("login", next=request.endpoint))
     return "admin!"
+
+@app.route("/logout")
+def logout():
+    if ('user' in session):
+        session.pop("user", None)
+        return "Logout"
+    else:
+        return redirect(url_for("index"))
 
 # serve static file
 @app.route("/robots.txt")
 def robot():
     return send_from_directory("static", "robots.txt")
-
-# download file
-@app.route("/download")
-def download():
-    return send_file("static/test")
 
 # make_response
 @app.route("/makeresponse/")
@@ -85,6 +98,11 @@ def makeresp():
     resp = make_response("test", 200)
     resp.headers['X-Author'] = "ITAC"
     return resp
+
+# Jinja
+@app.route("/jinja/<name>")
+def jinja(name):
+    return render_template("index.html", title=name)
 
 
 if __name__ == '__main__':
