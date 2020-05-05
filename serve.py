@@ -12,25 +12,6 @@ app.secret_key = "test"
 DEBUG = True
 PORT = 8989
 
-"""
-THIS IS JINJA EXAMPLES
-THIS IS OLD VERSION
-"""
-# @app.route("/")
-# def index():
-#     return render_template("index.html", title="Index of /")
-
-
-# @app.route("/table/")
-# def table():
-#     return render_template("table.html", lst=['a', 'b', 'c', 'd'], combine=True)
-
-# with app.test_request_context():
-#     print(url_for('index'))
-#     print(url_for('login'))
-#     print(url_for('login', next='/'))
-#     print(url_for('db', dbname='John Doe', dbid='123'))
-
 
 @app.route("/")
 def index():
