@@ -30,12 +30,12 @@ def get():
     passwd = request.args.get("passwd")
     return "name: %s, password: %s" % (name, passwd)
 
+
 @app.route("/post/")
 def post():
     name = request.form["name"]
     passwd = request.form["passwd"]
     return "name: %s, password: %s" % (name, passwd)
-
 
 
 # implement login
@@ -59,6 +59,7 @@ def admin():
     if ('user' not in session):
         return redirect(url_for("login", next=request.endpoint))
     return "admin!"
+
 
 @app.route("/logout")
 def logout():
